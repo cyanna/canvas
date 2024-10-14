@@ -1245,7 +1245,7 @@ DEPENDENCIES
   brakeman (~> 6.0)
   broadcast_policy!
   browser (~> 5.3)
-  bundler (~> 2.2)
+  bundler (~> 2.5.10)
   business_time (= 0.13.0)
   canvas_breach_mitigation!
   canvas_cache!

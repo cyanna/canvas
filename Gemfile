@@ -36,7 +36,7 @@ end
 
 require_relative "config/canvas_rails_switcher"
 
-gem "bundler", "~> 2.2"
+gem "bundler", "~> 2.5.10"
 
 if Bundler.default_gemfile == gemfile
   SUPPORTED_RAILS_VERSIONS.product([nil, true]).each do |rails_version, include_plugins|
