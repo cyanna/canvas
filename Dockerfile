@@ -1,10 +1,7 @@
-# Ensure Tini runs as PID 1
-ENTRYPOINT ["/tini", "--", "/usr/src/entrypoint"]
+# GENERATED FILE, DO NOT MODIFY!
+# To update this file please edit the relevant template and run the generation
+# task `build/dockerfile_writer.rb --env development --compose-file docker-compose.yml,docker-compose.override.yml --in build/Dockerfile.template --out Dockerfile`
 
-# Fix sudo permissions
-RUN chown root:root /usr/bin/sudo && chmod 4755 /usr/bin/sudo
-
-# Rest of your Dockerfile
 ARG RUBY=3.3
 
 FROM instructure/ruby-passenger:$RUBY
@@ -33,8 +30,10 @@ WORKDIR $APP_HOME
 USER root
 
 ARG USER_ID
+# This step allows docker to write files to a host-mounted volume with the correct user permissions.
+# Without it, some linux distributions are unable to write at all to the host mounted volume.
 RUN if [ -n "$USER_ID" ]; then usermod -u "${USER_ID}" docker \
-  && chown --from=9999 docker /usr/src/nginx /usr/src/app -R; fi
+        && chown --from=9999 docker /usr/src/nginx /usr/src/app -R; fi
 
 RUN mkdir -p /etc/apt/keyrings \
   && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
@@ -47,6 +46,46 @@ RUN mkdir -p /etc/apt/keyrings \
   && add-apt-repository ppa:git-core/ppa -ny \
   && apt-get update -qq \
   && apt-get install -qqy --no-install-recommends \
-  nodejs \
-  yarn="$YARN_VERSION" \
-  libxmlsec1-dev \
+       nodejs \
+       yarn="$YARN_VERSION" \
+       libxmlsec1-dev \
+       python3-lxml \
+       python-is-python3 \
+       libicu-dev \
+       libidn11-dev \
+       parallel \
+       postgresql-client-$POSTGRES_CLIENT \
+       unzip \
+       pbzip2 \
+       fontforge \
+       git \
+       build-essential \
+  && rm -rf /var/lib/apt/lists/* \
+  && mkdir -p /home/docker/.gem/ruby/$RUBY_MAJOR.0
+
+RUN gem install bundler --no-document -v 2.5.10 \
+  && find $GEM_HOME ! -user docker | xargs chown docker:docker
+RUN npm install -g npm@9.8.1 && npm cache clean --force
+
+USER docker
+
+RUN set -eux; \
+  mkdir -p \
+    .yardoc \
+    app/stylesheets/brandable_css_brands \
+    app/views/info \
+    config/locales/generated \
+    log \
+    node_modules \
+    packages/js-utils/es \
+    packages/js-utils/lib \
+    packages/js-utils/node_modules \
+    pacts \
+    public/dist \
+    public/doc/api \
+    public/javascripts/translations \
+    reports \
+    tmp \
+    /home/docker/.bundle/ \
+    /home/docker/.cache/yarn \
+    /home/docker/.gem/
