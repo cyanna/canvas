@@ -1,8 +1,9 @@
-<% url = ENV.fetch('DATABASE_URL', 'postgres://localhost:5432/canvas_development') %>
 common: &common
   adapter: postgresql
-  url: <%= url %>
+  host: <%= ENV.fetch('CANVAS_DATABASE_HOST', 'postgres') %>
+  password: <%= ENV.fetch('POSTGRES_PASSWORD') %>
   encoding: utf8
+  username: <%= ENV.fetch('CANVAS_DATABASE_USERNAME', 'postgres') %>
   timeout: 5000
   prepared_statements: false
   use_qualified_names: true
@@ -11,15 +12,15 @@ common: &common
 
 production:
   <<: *common
-  url: <%= url %>
+  database: <%= ENV.fetch('CANVAS_DATABASE_PRODUCTION', 'canvas_production') %>
 
 development:
   <<: *common
-  url: <%= url + '_development' %>
+  database: <%= ENV.fetch('CANVAS_DATABASE_DEVELOPMENT', 'canvas_development') %>
 
 test:
   <<: *common
-  url: <%= url + '_test' %>
+  database: <%= ENV.fetch('CANVAS_DATABASE_TEST', 'canvas_test') %>
   shard1: canvas_test_shard_1
   shard2: canvas_test_shard_2
   test_shard_1: canvas_test_shard_1
