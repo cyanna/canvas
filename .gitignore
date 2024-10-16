@@ -49,7 +49,7 @@ npm-debug.log
 /storybook-static/
 /tmp/*
 !/tmp/.keep
-/vendor
+/vendor/gems
 yarn-error.log
 dump.rdb
 .eslintcache
