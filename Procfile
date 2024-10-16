@@ -1,1 +1,1 @@
-web: echo "LD_LIBRARY_PATH is set to $LD_LIBRARY_PATH" && bundle exec rails server -p $PORT
+web: LD_LIBRARY_PATH=/app/.apt/usr/lib/x86_64-linux-gnu bundle exec rails server -p $PORT
