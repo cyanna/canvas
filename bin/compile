@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# Function to find the correct build directory
+find_build_dir() {
+  for dir in /tmp/build_*; do
+    if [ -d "$dir/.apt/usr/lib/x86_64-linux-gnu" ]; then
+      echo "$dir"
+      return
+    fi
+  done
+}
+
+# Find the build directory
+BUILD_DIR=$(find_build_dir)
+echo "BUILD_DIR is set to $BUILD_DIR"
+
+# Set the LD_LIBRARY_PATH
+if [ -n "$BUILD_DIR" ]; then
+  export LD_LIBRARY_PATH=$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+  echo "LD_LIBRARY_PATH is set to $LD_LIBRARY_PATH"
+
+  # Ensure the .apt directory exists
+  if [ -d "$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu" ]; then
+    echo "Copying libraries to $BUILD_DIR/.heroku/vendor/lib"
+    mkdir -p $BUILD_DIR/.heroku/vendor/lib
+    cp -r $BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu/* $BUILD_DIR/.heroku/vendor/lib/
+  else
+    echo "Directory $BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu does not exist"
+  fi
+else
+  echo "Build directory not found"
+fi
