@@ -24,6 +24,10 @@ if [ -n "$BUILD_DIR" ]; then
     echo "Copying libraries to $BUILD_DIR/.heroku/vendor/lib"
     mkdir -p $BUILD_DIR/.heroku/vendor/lib
     cp -r $BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu/* $BUILD_DIR/.heroku/vendor/lib/
+
+    # Create a profile script to set LD_LIBRARY_PATH at runtime
+    mkdir -p $BUILD_DIR/.profile.d
+    echo "export LD_LIBRARY_PATH=$BUILD_DIR/.heroku/vendor/lib:\$LD_LIBRARY_PATH" > $BUILD_DIR/.profile.d/libxmlsec1.sh
   else
     echo "Directory $BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu does not exist"
   fi
