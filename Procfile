@@ -1,1 +1,1 @@
-web: bundle exec rails s
+web: echo "LD_LIBRARY_PATH is set to $LD_LIBRARY_PATH" && bundle exec rails server -p $PORT
