@@ -43,13 +43,6 @@ debug_launch.call if !defined?(Passenger) && Rails.env.development?
 
 module CanvasRails
   class Application < Rails::Application
-    # Add debugging statements
-    puts "LD_LIBRARY_PATH: #{ENV['LD_LIBRARY_PATH']}"
-    puts "Contents of /app/.heroku/vendor/lib:"
-    puts `ls -l /app/.heroku/vendor/lib`
-    puts "Contents of /app/.apt/usr/lib/x86_64-linux-gnu:"
-    puts `ls -l /app/.apt/usr/lib/x86_64-linux-gnu`
-    
     config.autoloader = :zeitwerk
 
     config.add_autoload_paths_to_load_path = false
