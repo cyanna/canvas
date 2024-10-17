@@ -1,1 +1,1 @@
-web: LD_LIBRARY_PATH=/app/.heroku/vendor/lib:$LD_LIBRARY_PATH bundle exec rails server -p $PORT
+web: bundle exec rails server -p $PORT
